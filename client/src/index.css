@@ -1,0 +1,139 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+.page {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* NavBar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+}
+
+nav .logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+/* Buttons */
+button, .resume-button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover, .resume-button:hover {
+  background-color: #555;
+}
+
+/* Projects */
+.projects-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.project-card {
+  width: 250px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.project-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Contact Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+input, textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+/* Logo Styles */
+.logo-link {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.logo-shape {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: #555; /* Shape color */
+  border-radius: 8px;      /* Rounded rectangle */
+  text-align: center;
+  line-height: 40px;        /* Center text vertically */
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+ 
+.logo-shape:hover {
+  background-color: #777;
+}

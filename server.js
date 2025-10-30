@@ -6,11 +6,12 @@ import mongoose from "mongoose";
 // Connect to MongoDB
 // ---------------------------
 mongoose.Promise = global.Promise;
+
 mongoose
   .connect(config.mongoUri)
-  .then(() => console.log("Connected to the database!"))
+  .then(() => console.log("✅ Connected to the MongoDB database successfully!"))
   .catch((err) => {
-    console.error("Database connection error:", err);
+    console.error("❌ Database connection error:", err);
     process.exit(1);
   });
 
@@ -26,7 +27,7 @@ import "./server/models/contact.model.js";
 import "./server/models/qualification.model.js";
 import "./server/models/project.model.js";
 
-console.log("All models loaded successfully!");
+console.log("📦 All models loaded successfully!");
 
 // ---------------------------
 // Import Routes
@@ -52,16 +53,18 @@ app.use("/assets", assetsRoutes);
 // Default Route
 // ---------------------------
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the User application." });
+  res.json({ message: "Welcome to the Portfolio User Application API 🚀" });
 });
 
 // ---------------------------
 // Start Server
 // ---------------------------
+console.log("🛠️ Backend initialization complete — starting server...");
+
 app.listen(config.port, (err) => {
   if (err) {
-    console.error("Server startup error:", err);
+    console.error("❌ Server startup error:", err);
   } else {
-    console.info(`Server started on port ${config.port}.`);
+    console.info(`✅ Server started successfully on port ${config.port}.`);
   }
 });
