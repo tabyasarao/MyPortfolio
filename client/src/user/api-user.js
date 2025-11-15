@@ -1,37 +1,26 @@
 const API_BASE = "/api/users";
-
 const handleResponse = async (response) => {
-  try {
-    const data = await response.json();
-    if (response.status >= 400) {
-      
-      return { error: data.error || 'Unknown error occurred' };
-    }
-    return data;
-  } catch (err) {
-    console.error("Failed to parse response JSON:", err);
-    
-    return { error: "Failed to process server response." };
-  }
+  try {
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Failed to parse response JSON:", err);
+    throw err;
+  }
 };
-
 const handleError = (err) => {
-  console.error("API call failed:", err);
-  throw err;
+  console.error("API call failed:", err);
+  throw err;
 };
-
-
-
 const create = async (user) => {
-  try {
-    const response = await fetch(API_BASE, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-     
-           body: JSON.stringify(user),
+  try {
+    const response = await fetch(API_BASE, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+  body: JSON.stringify(user),
     });
     return await handleResponse(response);
   } catch (err) {
@@ -62,7 +51,7 @@ const read = async ({ userId }, { t }, signal) => {
     });
     return await handleResponse(response);
   } catch (err) {
-     return handleError(err);
+    return handleError(err);
   }
 };
 const update = async ({ userId }, { t }, user) => {
@@ -97,3 +86,4 @@ const remove = async ({ userId }, { t }) => {
   }
 };
 export { create, list, read, update, remove };
+
