@@ -56,7 +56,7 @@ const remove = async (req, res) => {
 const removeAll = async (req, res) => {
   try {
     await Qualification.deleteMany({});
-    res.json({ message: "All qualifications d ed" });
+    res.json({ message: "All qualifications deleated" });
   } catch (err) {
     res.status(400).json({ error: errorHandler.getErrorMessage(err) });
   }
