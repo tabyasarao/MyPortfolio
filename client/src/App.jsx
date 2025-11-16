@@ -1,32 +1,44 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import NavBar from "./components/NavBar";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Projects from "./pages/Projects";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
-import './App.css';
-const App=() => {
-  return (
-    <Router>
-      <div className="app-root">
-      <NavBar />
-      <main className="main-content">
-        {/* Define Routes for different pages */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/contact" element={<Contact />} />
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-        <Route path="*" element={<Home />} />
-      </Routes>
-      </main>
-      </div>
-      </Router>
-   );
-}
+// Import all components
+import Home from './pages/Home'; // Assuming you have a Home page
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
+import EducationList from './pages/EducationList'; // The READ/VIEW component
+import NewEducation from './pages/NewEducation'; // The CREATE component
+// You will need an EditEducation component later for UPDATE
+
+// Import the route protection wrappers
+import PrivateRoute from './components/PrivateRoute';
+import AdminRoute from './components/AdminRoute';
+
+const App = () => (
+  <Router>
+    <Routes>
+      {/* 1. Public Routes */}
+      <Route path="/" element={<Home />} />
+      <Route path="/signin" element={<Signin />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/education" element={<EducationList />} /> {/* VIEW is public */}
+
+      {/* 2. Admin Protected Routes (for CUD operations) */}
+      <Route element={<AdminRoute />}>
+        <Route path="/education/new" element={<NewEducation />} /> {/* CREATE */}
+        {/* Placeholder for Edit/Update (U) - you will create this component */}
+        <Route path="/education/edit/:educationId" element={<div>Edit Education Form (To be Implemented)</div>} /> 
+        
+        {/* Add Contact and Project Admin routes here later */}
+      </Route>
+
+      {/* 3. General Private Routes (for future Profile/Dashboard) */}
+      <Route element={<PrivateRoute />}>
+        {/* Example: A user's profile dashboard */}
+        <Route path="/dashboard" element={<div>User Dashboard (To be Implemented)</div>} />
+      </Route>
+
+    </Routes>
+  </Router>
+);
 
 export default App;
