@@ -13,7 +13,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { create } from "../../user/api-user";
+import { create } from "./api-user";
 export default function Signup() {
   const [values, setValues] = useState({
     name: "",
@@ -22,19 +22,19 @@ export default function Signup() {
     error: "",
   });
   const [open, setOpen] = useState(false);
-  const handleChange = (name) => (event) => {
+  const handleChange = (name) => (event) => {
     setValues({ ...values, [name]: event.target.value });
   };
-  const handleClose = () => {
+  const handleClose = () => {
     setOpen(false);
   };
-  const clickSubmit = () => {
+  const clickSubmit = () => {
     const user = {
       name: values.name || undefined,
       email: values.email || undefined,
       password: values.password || undefined,
     };
-   create(user).then((data) => {
+    create(user).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
@@ -42,7 +42,7 @@ export default function Signup() {
       }
     });
   };
-  return (
+return (
     <div>
       <Card
         sx={{
@@ -57,7 +57,7 @@ export default function Signup() {
           <Typography variant="h6" sx={{ fontSize: 18 }}>
             Sign Up
           </Typography>
-         <TextField
+          <TextField
             id="name"
             label="Name"
             sx={{ width: "100%", mb: 2 }}
@@ -82,12 +82,12 @@ export default function Signup() {
             type="password"
             margin="normal"
           />
-        {values.error && (
+          {values.error && (
             <Typography color="error" sx={{ mt: 1 }}>
               {values.error}
             </Typography>
           )}
-        </CardContent>
+  </CardContent>
         <CardActions>
           <Button
             color="primary"
@@ -122,3 +122,4 @@ export default function Signup() {
     </div>
   );
 }
+
