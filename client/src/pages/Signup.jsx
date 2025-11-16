@@ -1,125 +1,32 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  CardActions,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import { create } from "./api-user";
-export default function Signup() {
-  const [values, setValues] = useState({
-    name: "",
-    password: "",
-    email: "",
-    error: "",
-  });
-  const [open, setOpen] = useState(false);
-  const handleChange = (name) => (event) => {
-    setValues({ ...values, [name]: event.target.value });
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const clickSubmit = () => {
-    const user = {
-      name: values.name || undefined,
-      email: values.email || undefined,
-      password: values.password || undefined,
-    };
-    create(user).then((data) => {
-      if (data.error) {
-        setValues({ ...values, error: data.error });
-      } else {
-        setOpen(true);
-      }
-    });
-  };
-return (
-    <div>
-      <Card
-        sx={{
-          maxWidth: 400,
-          margin: "0 auto",
-          mt: 3,
-          p: 2,
-          textAlign: "center",
-        }}
-      >
-        <CardContent>
-          <Typography variant="h6" sx={{ fontSize: 18 }}>
-            Sign Up
-          </Typography>
-          <TextField
-            id="name"
-            label="Name"
-            sx={{ width: "100%", mb: 2 }}
-            value={values.name}
-            onChange={handleChange("name")}
-            margin="normal"
-          />
-<TextField
-            id="email"
-            label="Email"
-            sx={{ width: "100%", mb: 2 }}
-            value={values.email}
-            onChange={handleChange("email")}
-            margin="normal"
-          />
-          <TextField
-            id="password"
-            label="Password"
-            sx={{ width: "100%", mb: 2 }}
-            value={values.password}
-            onChange={handleChange("password")}
-            type="password"
-            margin="normal"
-          />
-          {values.error && (
-            <Typography color="error" sx={{ mt: 1 }}>
-              {values.error}
-            </Typography>
-          )}
-  </CardContent>
-        <CardActions>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={clickSubmit}
-            sx={{ margin: "0 auto", mb: 2 }}
-          >
-            Submit
-          </Button>
-        </CardActions>
-      </Card>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Account</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            New account successfully created.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Link to="/signin">
-            <Button
-              color="primary"
-              autoFocus
-              variant="contained"
-              onClick={handleClose}
-            >
-              Sign In
-            </Button>
-          </Link>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
+import React from 'react';
 
+const Signup = () => {
+  return (
+    <div className="p-8 max-w-md mx-auto mt-20 bg-white rounded-xl shadow-2xl border border-gray-200">
+      <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-8">User Sign Up</h2>
+      <p className="text-center text-gray-600 mb-4">
+        This is a placeholder for the registration form.
+      </p>
+      
+      <form className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Your Name" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <input type="password" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Create Password" />
+        </div>
+        <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
+          Sign Up
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Signup;
