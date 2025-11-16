@@ -1,87 +1,98 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { create } from '../../lib/api-contact';
 
-export default function Contact() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    contactNumber: "",
-    email_id: "",
-    message: "",
+const Contact = () => {
+  const [values, setValues] = useState({
+    name: '',
+    email: '',
+    message: '',
+    error: '',
+    success: false
   });
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // State management for form
+  const handleChange = name => event => {
+    setValues({ ...values, [name]: event.target.value });
   };
 
-  // Handle form submission
-
-  const handleSubmit = (e) => {
+  const clickSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    alert("Thank you! Your message has been submitted.");
-    navigate("/"); // redirect to Home Page
+    
+    const contactMessage = {
+      name: values.name,
+      email: values.email,
+      message: values.message,
+    };
+
+    // Call the public 'create' API
+    const data = await create(contactMessage);
+
+    if (data && data.error) {
+      setValues({ ...values, error: data.error, success: false });
+    } else {
+      // Success! Clear the form and show a success message
+      setValues({ 
+        name: '', 
+        email: '', 
+        message: '', 
+        error: '', 
+        success: true 
+      });
+    }
   };
 
+  // This component uses the CSS classes you provided
   return (
     <div className="page contact">
       <h2>Contact Me</h2>
-
-      {/* Contact Info Panel */}
+      
       <div className="contact-panel">
-        <h3>Get in Touch</h3>
-        <p>Email: tabyasarao@gmail.com</p>
-        <p>Phone: +1 437 343 4542</p>
-        <p>Location: Toronto, ON</p>
+        <h3>Have a question or want to work together?</h3>
+        <p>Fill out the form below and I'll get back to you as soon as possible.</p>
       </div>
 
-      {/* Contact Form */}
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form className="contact-form" onSubmit={clickSubmit}>
         <div className="form-group">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
+          <input 
+            type="text" 
+            placeholder="Your Name" 
+            value={values.name} 
+            onChange={handleChange('name')} 
+            required 
           />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
+          <input 
+            type="email" 
+            placeholder="Your Email" 
+            value={values.email} 
+            onChange={handleChange('email')} 
+            required 
           />
         </div>
-        <input
-          type="text"
-          name="contactNumber"
-          placeholder="Contact Number"
-          value={formData.contactNumber}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Send Message</button>
+        <textarea 
+          placeholder="Your Message" 
+          value={values.message} 
+          onChange={handleChange('message')} 
+          required 
+        ></textarea>
+
+        {/* --- Feedback Messages --- */}
+        {values.error && (
+          <p className="text-red-500 text-sm italic mb-4">
+            Error: {values.error}
+          </p>
+        )}
+        {values.success && (
+          <p className="text-green-600 text-lg font-semibold mb-4">
+            Message sent successfully! Thank you.
+          </p>
+        )}
+        
+        <button type="submit">
+          Send Message
+        </button>
       </form>
     </div>
   );
-}
+};
+
+export default Contact;
