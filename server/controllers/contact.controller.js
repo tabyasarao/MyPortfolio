@@ -1,71 +1,81 @@
-import Contact from "../models/contact.model.js";
-import errorHandler from "./error.controller.js";
+import Contact from '../models/contact.model';
+import extend from 'lodash/extend';
+import errorHandler from '../helpers/dbErrorHandler';
 
-// Create contact
+/**
+ * findContactByID
+ * Middleware to fetch a specific contact message by ID. 
+ * This is used for the 'remove' route.
+ */
+const findContactByID = async (req, res, next, id) => {
+    try {
+        let contact = await Contact.findById(id);
+        if (!contact)
+            return res.status(400).json({
+                error: "Message not found"
+            });
+        req.contact = contact;
+        next();
+    } catch (err) {
+        return res.status(400).json({
+            error: "Could not retrieve contact message"
+        });
+    }
+};
+
+/**
+ * create
+ * Handles POST request from the public form. (CREATE)
+ */
 const create = async (req, res) => {
-  const contact = new Contact(req.body);
-  try {
-    await contact.save();
-    res.status(201).json({ message: "Contact created successfully", contact });
-  } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
-  }
+    const contact = new Contact(req.body);
+    try {
+        await contact.save();
+        return res.status(200).json({
+            message: "Message successfully sent!"
+        });
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
-// Get all contacts
+/**
+ * list
+ * Handles GET request for the Admin Inbox. (READ ALL)
+ */
 const list = async (req, res) => {
-  try {
-    const contacts = await Contact.find();
-    res.json(contacts);
-  } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
-  }
+    try {
+        // Fetch all messages, sorted by most recent first
+        let contacts = await Contact.find().sort({ 'createdAt': -1 });
+        res.json(contacts);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
-// Get contact by ID
-const contactByID = async (req, res, next, id) => {
-  try {
-    const contact = await Contact.findById(id);
-    if (!contact) return res.status(404).json({ error: "Contact not found" });
-    req.contact = contact;
-    next();
-  } catch (err) {
-    res.status(400).json({ error: "Could not retrieve contact" });
-  }
-};
-
-// Read one contact
-const read = (req, res) => res.json(req.contact);
-
-// Update contact
-const update = async (req, res) => {
-  try {
-    Object.assign(req.contact, req.body);
-    await req.contact.save();
-    res.json(req.contact);
-  } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
-  }
-};
-
-// Delete one contact
+/**
+ * remove
+ * Handles DELETE request from the Admin Inbox. (DELETE)
+ */
 const remove = async (req, res) => {
-  try {
-    await req.contact.deleteOne();
-    res.json({ message: "Contact deleted" });
-  } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
-  }
+    try {
+        let contact = req.contact;
+        let deletedContact = await contact.deleteOne();
+        res.json(deletedContact);
+    } catch (err) {
+        return res.status(400).json({
+            error: errorHandler.getErrorMessage(err)
+        });
+    }
 };
 
-// Delete all contacts
-const removeAll = async (req, res) => {
-  try {
-    await Contact.deleteMany({});
-    res.json({ message: "All contacts deleted" });
-  } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
-  }
+export default {
+    create,
+    findContactByID,
+    list,
+    remove
 };
-
-export default { create, list, contactByID, read, update, remove, removeAll };

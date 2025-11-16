@@ -1,29 +1,27 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const contactSchema = new mongoose.Schema({
-  firstname: {
-    type: String,
-    required: "First name is required",
-    trim: true,
-  },
-  lastname: {
-    type: String,
-    required: "Last name is required",
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: "Email is required",
-    trim: true,
-  },
-  message: {
-    type: String,
-    trim: true,
-  },
-  created: {
-    type: Date,
-    default: Date.now,
-  },
+// Define the Contact Message Schema
+const ContactSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        trim: true,
+        required: 'Name is required'
+    },
+    email: {
+        type: String,
+        trim: true,
+        required: 'Email is required',
+        match: [/.+\@.+\..+/, 'Please fill a valid email address']
+    },
+    message: {
+        type: String,
+        required: 'Message content is required'
+    },
+    // The date the message was received
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-export default mongoose.model("Contact", contactSchema);
+export default mongoose.model('Contact', ContactSchema);

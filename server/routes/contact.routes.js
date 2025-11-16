@@ -1,18 +1,17 @@
-import express from "express";
-import contactCtrl from "../controllers/contact.controller.js";
+import express from 'express';
+import contactCtrl from '../controllers/contact.controller';
+import authCtrl from '../controllers/auth.controller'; 
 
 const router = express.Router();
 
-router.route("/api/contacts")
-  .get(contactCtrl.list)         // Get all contacts
-  .post(contactCtrl.create)      // Add new contact
-  .delete(contactCtrl.removeAll) // Delete all contacts
+router.route('/api/contact')
+    .post(contactCtrl.create) // Public access: Anyone can create a message
+    .get(authCtrl.requireSignin, authCtrl.hasAuthorization(['admin']), contactCtrl.list); // Admin access: Only admin can list messages
 
-router.route("/api/contacts/:contactId")
-  .get(contactCtrl.read)         // Get contact by id
-  .put(contactCtrl.update)       // Update contact by id
-  .delete(contactCtrl.remove)    // Delete contact by id
+router.route('/api/contact/:contactId')
+    .delete(authCtrl.requireSignin, authCtrl.hasAuthorization(['admin']), contactCtrl.remove); // Admin access: Only admin can delete
 
-router.param("contactId", contactCtrl.contactByID);
+// Middleware to load the contact message on routes using :contactId
+router.param('contactId', contactCtrl.findContactByID);
 
 export default router;
