@@ -14,19 +14,21 @@ const UserSchema = new mongoose.Schema({
     match: [/.+\@.+\..+/, "Please fill a valid email address"],
     required: "Email is required",
   },
-  created: {
-    type: Date,
-    default: Date.now,
-  },
-  updated: {
-    type: Date,
-    default: Date.now,
-  },
   hashed_password: {
     type: String,
     required: "Password is required",
   },
   salt: String,
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  updated: Date,
 });
 
 // Virtual for password

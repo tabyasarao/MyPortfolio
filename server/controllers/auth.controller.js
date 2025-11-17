@@ -1,55 +1,32 @@
-import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import { expressjwt } from "express-jwt";
-import config from "./../../config/config.js";
-const signin = async (req, res) => {
-  try {
-    let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(401).json({ error: "User not found" });
-    if (!user.authenticate(req.body.password)) {
-      return res
-        .status(401)
-        .send({ error: "Email and password don't match." });
-    }
-    const token = jwt.sign({ _id: user._id }, config.jwtSecret);
-    res.cookie("t", token, { expire: new Date() + 9999 });
-    return res.json({
-      token,
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
-  } catch (err) {
-    return res.status(401).json({ error: "Could not sign in" });
-  }
+import { expressjwt } from "express-jwt"; // notice: expressjwt (not expressJwt)
+
+const JWT_SECRET = "your_secret_key_here"; // use your actual secret
+
+export const signin = async (req, res) => {
+  // your signin logic…
 };
-const signout = (req, res) => {
-  res.clearCookie("t", {
-    path: "/",
-    httpOnly: true,
-    sameSite: "Lax", // or 'None' if using cross-origin with HTTPS
-    secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
-  });
-  return res.status(200).json({
-    message: "signed out",
-  });
+
+export const signout = (req, res) => {
+  res.clearCookie("t");
+  return res.status(200).json({ message: "signed out" });
 };
-const requireSignin = expressjwt({
-  secret: config.jwtSecret,
+
+// ✅ Correct middleware:
+export const requireSignin = expressjwt({
+  secret: JWT_SECRET,
   algorithms: ["HS256"],
-  userProperty: "auth",
+  requestProperty: "auth", // puts decoded token in req.auth
 });
 
-const hasAuthorization = (req, res, next) => {
-  const authorized = req.profile && req.auth && req.profile._id == req.auth._id;
-  if (!authorized) {
-    return res.status(403).json({
-      error: "User is not authorized",
-    });
-  }
-  next();
-};
+// Authorization middleware
+export const hasAuthorization = (req, res) => {
+  const authorized =
+    req.profile && req.auth && req.profile._id == req.auth._id;
 
-export default { signin, signout, requireSignin, hasAuthorization };
+  if (!authorized) {
+    return res.status(403).json({ error: "User is not authorized" });
+  }
+
+  return res.status(200).end();
+};

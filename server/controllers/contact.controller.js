@@ -1,6 +1,6 @@
-import Contact from '../models/contact.model';
-import extend from 'lodash/extend';
-import errorHandler from '../helpers/dbErrorHandler';
+import Contact from '../models/contact.model.js';
+import extend from 'lodash/extend.js';
+import errorHandler from '../helpers/dbErrorHandler.js';
 
 /**
  * findContactByID
