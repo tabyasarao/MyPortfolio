@@ -46,7 +46,7 @@ app.use("/api", contactRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", qualificationRoutes);
 app.use("/api", userRoutes);
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/assets", assetsRoutes);
 
 // ---------------------------

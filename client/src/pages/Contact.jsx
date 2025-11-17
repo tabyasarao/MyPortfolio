@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { create } from '../../lib/api-contact';
-
+import { createContact } from "../lib/api-contact";
+const create = createContact;
 const Contact = () => {
   const [values, setValues] = useState({
     name: '',
