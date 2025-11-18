@@ -1,19 +1,19 @@
 import express from "express";
 import projectCtrl from "../controllers/project.controller.js";
-import { requireSignin, hasAuthorization } from "../controllers/auth.controller.js";
+import { requireSignin, isAdmin } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 
-// ------- PUBLIC ROUTES -------
+// PUBLIC ROUTES
 router.get("/api/projects", projectCtrl.list);
 router.get("/api/projects/:projectId", projectCtrl.read);
 
-// ------- ADMIN-ONLY ROUTES -------
-router.post("/api/projects", requireSignin, hasAuthorization, projectCtrl.create);
-router.put("/api/projects/:projectId", requireSignin, hasAuthorization, projectCtrl.update);
-router.delete("/api/projects/:projectId", requireSignin, hasAuthorization, projectCtrl.remove);
+// ADMIN ONLY ROUTES
+router.post("/api/projects", requireSignin, isAdmin, projectCtrl.create);
+router.put("/api/projects/:projectId", requireSignin, isAdmin, projectCtrl.update);
+router.delete("/api/projects/:projectId", requireSignin, isAdmin, projectCtrl.remove);
 
-// Param middleware
+// auto-load
 router.param("projectId", projectCtrl.projectByID);
 
 export default router;

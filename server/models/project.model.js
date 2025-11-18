@@ -6,24 +6,14 @@ const projectSchema = new mongoose.Schema({
     required: "Project title is required",
     trim: true,
   },
-  firstname: {
+  role: {
     type: String,
-    required: "First name is required",
+    required: "Role is required",
     trim: true,
   },
-  lastname: {
+  image: {
     type: String,
-    required: "Last name is required",
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: "Email is required",
-    trim: true,
-  },
-  completion: {
-    type: Date,
-    required: "Completion date is required",
+    default: "",
   },
   description: {
     type: String,

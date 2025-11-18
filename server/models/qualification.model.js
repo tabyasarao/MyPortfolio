@@ -1,33 +1,19 @@
 import mongoose from "mongoose";
 
 const qualificationSchema = new mongoose.Schema({
-  title: {
+  school: {
     type: String,
-    required: "Qualification title is required",
+    required: "School name is required",
     trim: true,
   },
-  firstname: {
+  degree: {
     type: String,
-    required: "First name is required",
+    required: "Degree is required",
     trim: true,
   },
-  lastname: {
+  year: {
     type: String,
-    required: "Last name is required",
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: "Email is required",
-    trim: true,
-  },
-  completion: {
-    type: Date,
-    required: "Completion date is required",
-  },
-  description: {
-    type: String,
-    required: "Description is required",
+    required: "Year is required",
   },
   created: {
     type: Date,
