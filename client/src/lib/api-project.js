@@ -1,50 +1,89 @@
 // src/lib/api-project.js
+
 const API_URL = "http://localhost:3000/api/projects";
 
-export const createProject = async (projectData) => {
+/**
+ * LIST all projects (public)
+ */
+export const list = async () => {
   try {
-    const res = await fetch(`${API_URL}`, {
+    const response = await fetch(API_URL, { method: "GET" });
+    return await response.json();
+  } catch (err) {
+    return { error: "Network error. Could not load projects." };
+  }
+};
+
+/**
+ * READ a single project (public)
+ */
+export const read = async (params) => {
+  try {
+    const response = await fetch(`${API_URL}/${params.projectId}`, {
+      method: "GET",
+    });
+
+    return await response.json();
+  } catch (err) {
+    return { error: "Network error. Could not load project." };
+  }
+};
+
+/**
+ * CREATE project (Admin only)
+ */
+export const create = async (credentials, project) => {
+  try {
+    const response = await fetch(API_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(projectData)
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + credentials.t,
+      },
+      body: JSON.stringify(project),
     });
-    return await res.json();
+
+    return await response.json();
   } catch (err) {
-    console.error("Error creating project:", err);
-    throw err;
+    return { error: "Network error. Could not create project." };
   }
 };
 
-export const getProjects = async () => {
+/**
+ * UPDATE project (Admin only)
+ */
+export const update = async (params, credentials, project) => {
   try {
-    const res = await fetch(`${API_URL}`);
-    return await res.json();
-  } catch (err) {
-    console.error("Error fetching projects:", err);
-    throw err;
-  }
-};
-
-export const updateProject = async (id, updatedData) => {
-  try {
-    const res = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/${params.projectId}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedData)
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + credentials.t,
+      },
+      body: JSON.stringify(project),
     });
-    return await res.json();
+
+    return await response.json();
   } catch (err) {
-    console.error("Error updating project:", err);
-    throw err;
+    return { error: "Network error. Could not update project." };
   }
 };
 
-export const deleteProject = async (id) => {
+/**
+ * DELETE project (Admin only)
+ */
+export const remove = async (params, credentials) => {
   try {
-    const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    return await res.json();
+    const response = await fetch(`${API_URL}/${params.projectId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer " + credentials.t,
+      },
+    });
+
+    return await response.json();
   } catch (err) {
-    console.error("Error deleting project:", err);
-    throw err;
+    return { error: "Network error. Could not delete project." };
   }
 };
+  

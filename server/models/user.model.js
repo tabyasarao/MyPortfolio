@@ -1,12 +1,7 @@
 import mongoose from "mongoose";
-import crypto from "crypto";
+import bcrypt from "bcryptjs"; // 🔑 Import bcryptjs for hashing
 
 const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: "Name is required",
-  },
   email: {
     type: String,
     trim: true,
@@ -14,15 +9,15 @@ const UserSchema = new mongoose.Schema({
     match: [/.+\@.+\..+/, "Please fill a valid email address"],
     required: "Email is required",
   },
-  hashed_password: {
+  // The field name is simplified to 'password' for consistency
+  password: { 
     type: String,
     required: "Password is required",
   },
-  salt: String,
   role: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    default: 'user', // Default all new sign-ups to 'user'
+    enum: ['user', 'admin'] // Ensures only valid roles are saved
   },
   created: {
     type: Date,
@@ -31,46 +26,35 @@ const UserSchema = new mongoose.Schema({
   updated: Date,
 });
 
-// Virtual for password
-UserSchema.virtual("password")
-  .set(function (password) {
-    this._password = password;
-    this.salt = this.makeSalt();
-    this.hashed_password = this.encryptPassword(password);
-  })
-  .get(function () {
-    return this._password;
-  });
-
-// Password validation
-UserSchema.path("hashed_password").validate(function (v) {
-  if (this._password && this._password.length < 6) {
-    this.invalidate("password", "Password must be at least 6 characters.");
+// --- Mongoose Middleware (Pre-Save Hook) ---
+// This runs BEFORE saving the user document to the database.
+UserSchema.pre("save", async function (next) {
+  // Only hash the password if it is new or has been modified
+  if (!this.isModified("password")) {
+    return next();
   }
-  if (this.isNew && !this._password) {
-    this.invalidate("password", "Password is required");
-  }
-}, null);
 
-// Methods for authentication
-UserSchema.methods = {
-  authenticate: function (plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password;
-  },
-  encryptPassword: function (password) {
-    if (!password) return "";
-    try {
-      return crypto
-        .createHmac("sha1", this.salt)
-        .update(password)
-        .digest("hex");
-    } catch (err) {
-      return "";
-    }
-  },
-  makeSalt: function () {
-    return Math.round(new Date().valueOf() * Math.random()) + "";
-  },
+  // Check password length validation
+  if (this.password.length < 6) {
+    // Manually invalidate the document and prevent save
+    return next(new Error("Password must be at least 6 characters."));
+  }
+
+  try {
+    // Hash the password
+    const salt = await bcrypt.genSalt(10); // Generate salt with 10 rounds
+    this.password = await bcrypt.hash(this.password, salt); // Store the hash
+    next();
+  } catch (error) {
+    next(error); // Pass any hashing errors to Mongoose
+  }
+});
+
+// --- Mongoose Instance Method (Comparison) ---
+// This adds a method to the user object to check password validity
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  // Use bcrypt to compare the plain text with the stored hash
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 export default mongoose.model("User", UserSchema);

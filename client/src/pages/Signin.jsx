@@ -9,24 +9,40 @@ export default function SignIn({ onAuth }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form:", form);
-    const data = await signin(form); // call backend signin API
-    console.log("API response:", data);
-    if (data.error) {
-      setError(data.error);
-    } else {
-      // Store JWT token and user info in localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+    setError("");
 
-      onAuth(); // mark user as authenticated
-      console.log("User autheticated, redirecting to home...");
-      navigate("/"); // redirect to home page
+    console.log("Submitting form:", form);
+
+    // Call backend signin API
+    const data = await signin(form);
+    console.log("API response:", data);
+
+    // Handle backend error
+    if (!data || data.error) {
+      setError(data?.error || "Login failed. Try again.");
+      return;
     }
+
+    // Validate token + user object
+    if (!data.token || !data.user) {
+      setError("Invalid response from server. Please try again.");
+      return;
+    }
+
+    // Save JWT token and user (role, email, id)
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    // Trigger global auth state (if provided)
+    if (onAuth) onAuth();
+
+    console.log("User authenticated, redirecting to home...");
+    navigate("/"); // redirect to home page
   };
 
   return (
@@ -51,6 +67,7 @@ export default function SignIn({ onAuth }) {
           onChange={handleChange}
           required
         />
+
         <button type="submit" className="signin-button">
           Sign In
         </button>

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { createEducation, getEducations, updateEducation, deleteEducation } from "../lib/api-education";
+import { 
+  list as getEducations,
+  create,
+  remove
+} from "../lib/api-education";
 
 export default function Education() {
   const [educationList, setEducationList] = useState([]);
@@ -17,23 +21,27 @@ export default function Education() {
     };
     fetchEducations();
 
-    // Check if user is admin from localStorage token
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.role === "admin") setIsAdmin(true);
   }, []);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
+
     if (!isAdmin) {
-      setError("You must be logged in as admin to add education");
+      setError("You must be logged in as admin to add education.");
       return;
     }
-    const data = await createEducation(form, token);
-    if (data.error) setError(data.error);
-    else {
+
+    const data = await create({ t: token }, form);
+
+    if (data.error) {
+      setError(data.error);
+    } else {
       setEducationList([...educationList, data]);
       setForm({ school: "", degree: "", year: "" });
       setError("");
@@ -43,9 +51,12 @@ export default function Education() {
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
-    const data = await deleteEducation(id, token);
-    if (data.error) setError(data.error);
-    else {
+
+    const data = await remove({ qualificationId: id }, { t: token });
+
+    if (data.error) {
+      setError(data.error);
+    } else {
       setEducationList(educationList.filter((edu) => edu._id !== id));
       setSuccess("Education deleted successfully");
     }
@@ -91,13 +102,17 @@ export default function Education() {
       )}
 
       <div className="card-container">
-        {educationList.map((edu, index) => (
-          <div key={index} className="card">
+        {educationList.map((edu) => (
+          <div key={edu._id} className="card">
             <h3>{edu.degree}</h3>
             <p>{edu.school}</p>
             <p>{edu.year}</p>
+
             {isAdmin && (
-              <button onClick={() => handleDelete(edu._id)} style={{ marginTop: "10px" }}>
+              <button
+                onClick={() => handleDelete(edu._id)}
+                style={{ marginTop: "10px" }}
+              >
                 Delete
               </button>
             )}

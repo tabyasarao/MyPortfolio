@@ -1,64 +1,104 @@
 import Project from "../models/project.model.js";
 import errorHandler from "./error.controller.js";
 
+// ---------------- CREATE ----------------
 const create = async (req, res) => {
   const project = new Project(req.body);
+
   try {
     await project.save();
-    res.status(201).json({ message: "Project created", project });
+    return res.status(201).json({
+      message: "Project created successfully",
+      project,
+    });
   } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
   }
 };
 
+// ---------------- LIST ALL ----------------
 const list = async (req, res) => {
   try {
     const projects = await Project.find();
-    res.json(projects);
+    return res.json(projects);
   } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
   }
 };
 
+// ---------------- FIND BY ID ----------------
 const projectByID = async (req, res, next, id) => {
   try {
     const project = await Project.findById(id);
-    if (!project) return res.status(404).json({ error: "Project not found" });
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
     req.project = project;
     next();
   } catch (err) {
-    res.status(400).json({ error: "Could not retrieve project" });
+    return res.status(400).json({
+      error: "Invalid Project ID format",
+    });
   }
 };
 
-const read = (req, res) => res.json(req.project);
+// ---------------- READ ONE ----------------
+const read = (req, res) => {
+  return res.json(req.project);
+};
 
+// ---------------- UPDATE ----------------
 const update = async (req, res) => {
   try {
     Object.assign(req.project, req.body);
     await req.project.save();
-    res.json(req.project);
+
+    return res.json({
+      message: "Project updated successfully",
+      project: req.project,
+    });
   } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
   }
 };
 
+// ---------------- DELETE ONE ----------------
 const remove = async (req, res) => {
   try {
     await req.project.deleteOne();
-    res.json({ message: "Project deleted" });
+    return res.json({ message: "Project deleted successfully" });
   } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
   }
 };
 
+// ---------------- DELETE ALL (Admin Utility) ----------------
 const removeAll = async (req, res) => {
   try {
     await Project.deleteMany({});
-    res.json({ message: "All projects deleted" });
+    return res.json({ message: "All projects deleted" });
   } catch (err) {
-    res.status(400).json({ error: errorHandler.getErrorMessage(err) });
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
   }
 };
 
-export default { create, list, projectByID, read, update, remove, removeAll };
+export default {
+  create,
+  list,
+  projectByID,
+  read,
+  update,
+  remove,
+  removeAll,
+};

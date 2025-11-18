@@ -1,59 +1,88 @@
-const API_URL = "http://localhost:3000/api/educations";
+// src/lib/api-education.js
 
-// Helper to get token from localStorage
-const getToken = () => localStorage.getItem("token");
+const API_URL = "http://localhost:3000/api/qualifications";
 
-export const getEducations = async () => {
-  try {
-    const response = await fetch(API_URL);
-    return await response.json();
-  } catch (err) {
-    return { error: "Network error. Please try again." };
-  }
-};
-
-export const createEducation = async (education) => {
+/**
+ * CREATE qualification (Admin only)
+ */
+export const create = async (credentials, qualification) => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${getToken()}`,
+        "Authorization": "Bearer " + credentials.t,
       },
-      body: JSON.stringify(education),
+      body: JSON.stringify(qualification),
     });
+
     return await response.json();
   } catch (err) {
-    return { error: "Failed to create education." };
+    return { error: "Network error. Could not create qualification." };
   }
 };
 
-export const updateEducation = async (id, education) => {
+/**
+ * LIST all qualifications (public)
+ */
+export const list = async () => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(API_URL, { method: "GET" });
+    return await response.json();
+  } catch (err) {
+    return { error: "Network error. Could not load qualifications." };
+  }
+};
+
+/**
+ * READ one qualification
+ */
+export const read = async (params) => {
+  try {
+    const response = await fetch(`${API_URL}/${params.qualificationId}`, {
+      method: "GET",
+    });
+
+    return await response.json();
+  } catch (err) {
+    return { error: "Network error. Could not load qualification." };
+  }
+};
+
+/**
+ * UPDATE qualification (Admin only)
+ */
+export const update = async (params, credentials, qualification) => {
+  try {
+    const response = await fetch(`${API_URL}/${params.qualificationId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${getToken()}`,
+        "Authorization": "Bearer " + credentials.t,
       },
-      body: JSON.stringify(education),
+      body: JSON.stringify(qualification),
     });
+
     return await response.json();
   } catch (err) {
-    return { error: "Failed to update education." };
+    return { error: "Network error. Could not update qualification." };
   }
 };
 
-export const deleteEducation = async (id) => {
+/**
+ * DELETE qualification (Admin only)
+ */
+export const remove = async (params, credentials) => {
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/${params.qualificationId}`, {
       method: "DELETE",
       headers: {
-        "Authorization": `Bearer ${getToken()}`,
+        "Authorization": "Bearer " + credentials.t,
       },
     });
+
     return await response.json();
   } catch (err) {
-    return { error: "Failed to delete education." };
+    return { error: "Network error. Could not delete qualification." };
   }
 };
