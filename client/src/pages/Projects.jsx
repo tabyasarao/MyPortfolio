@@ -1,37 +1,88 @@
-import React from 'react';
+import React, { useState } from "react";
 
 export default function Projects() {
-    return(
-        <div className="page projects">
-            <h2>My Projects</h2>
-             
-        {/*Project 1 */}
-        <div className="project-card">
-            <img src="/webdevelopment.png" alt="Project 1" className="project-image"/>
-        <h3>Derma AI</h3>
-        <p>
-            <strong>Role:</strong>UI & System Documentation<br />
-            <strong>Description</strong> Designed an AI-powered skincare app, focusing on user interface development and documenting system requirements for seamless functionality.
-        </p>
+  const [projects, setProjects] = useState([]);
+  const [form, setForm] = useState({ title: "", role: "", description: "", image: "" });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setProjects([...projects, form]);
+    setForm({ title: "", role: "", description: "", image: "" });
+  };
+
+  const handleDelete = (index) => {
+    const updated = projects.filter((_, i) => i !== index);
+    setProjects(updated);
+  };
+
+  const handleEdit = (index) => {
+    setForm(projects[index]);
+    const updated = projects.filter((_, i) => i !== index);
+    setProjects(updated);
+  };
+
+  return (
+    <div className="page projects">
+      <h2>My Projects</h2>
+
+      {/* Project Form */}
+      <form className="contact-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <input
+            type="text"
+            name="title"
+            placeholder="Project Title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="role"
+            placeholder="Role"
+            value={form.role}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="image"
+            placeholder="Image URL"
+            value={form.image}
+            onChange={handleChange}
+          />
         </div>
-        {/*Project 2 */}
-        <div className="project-card">
-            <img src="/UNIX.png" alt="Project 2" className="project-image"/>
-            <h3>Unix Networking Project</h3>
+        <textarea
+          name="description"
+          placeholder="Project Description"
+          value={form.description}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Add Project</button>
+      </form>
+
+      {/* Project List */}
+      <div className="card-container">
+        {projects.map((proj, index) => (
+          <div key={index} className="project-card">
+            {proj.image && <img src={proj.image} alt={proj.title} className="project-image" />}
+            <h3>{proj.title}</h3>
             <p>
-                <strong>Role:</strong>System Integration <br />
-                <strong>Description</strong>Connected multiple virtual machines (VMs) to simulate network environments and practiced system administration and inter VM communication.
+              <strong>Role:</strong> {proj.role} <br />
+              <strong>Description:</strong> {proj.description}
             </p>
-        </div>
-        {/*Project 3 */}
-        <div className="project-card">
-            <img src="/database.png" alt="Project 3" className="project-image"/>
-            <h3>SQL Database Management</h3>
-            <p>
-                <strong>Role:</strong>Database Developer <br />
-                <strong>Description:</strong>Generated and managed a SQL database for an application, implementing tables, relationships, and queries to support data-driven functionalities.
-            </p>
-        </div>
-        </div>
-    );
+            <div className="card-buttons">
+              <button onClick={() => handleEdit(index)}>Edit</button>
+              <button onClick={() => handleDelete(index)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

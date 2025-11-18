@@ -5,8 +5,8 @@ import userCtrl from "../controllers/user.controller.js";
 const router = express.Router();
 
 // Authentication routes
-router.post("/auth/signin", signin);
-router.get("/auth/signout", signout);
-router.post("/auth/signup", userCtrl.create);
+router.post("/signin", signin);
+router.get("/signout", signout);
+router.post("/signup", userCtrl.create);
 
 export default router;

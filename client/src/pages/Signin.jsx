@@ -13,8 +13,9 @@ export default function SignIn({ onAuth }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form:", form);
     const data = await signin(form); // call backend signin API
-
+    console.log("API response:", data);
     if (data.error) {
       setError(data.error);
     } else {
@@ -23,6 +24,7 @@ export default function SignIn({ onAuth }) {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       onAuth(); // mark user as authenticated
+      console.log("User autheticated, redirecting to home...");
       navigate("/"); // redirect to home page
     }
   };
