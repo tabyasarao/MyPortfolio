@@ -1,4 +1,3 @@
-// server/controllers/auth.controller.js
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 import User from "../models/user.model.js";
@@ -18,7 +17,7 @@ export const signin = async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    // FIXED: Token now includes role
+
     const token = jwt.sign(
       { _id: user._id, role: user.role },
       JWT_SECRET,
