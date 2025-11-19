@@ -27,7 +27,7 @@ export default function NavBar() {
         <NavLink to="/about" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>About</NavLink>
         <NavLink to="/projects" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>Projects</NavLink>
         <NavLink to="/services" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>Services</NavLink>
-        <NavLink to="/education" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>Education</NavLink>
+        <NavLink to="/education" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>Qualifications</NavLink>
         <NavLink to="/contact" className={`nav-link ${isAuthPage ? "disabled-link" : ""}`}>Contact</NavLink>
 
         {!user && !isAuthPage && (
