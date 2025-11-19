@@ -91,10 +91,8 @@ function App() {
 
         {/* ADMIN + EDIT ROUTES */}
 
-        <Route 
-          path="/admin/contacts" 
-          element={isAuthenticated ? <AdminContacts /> : <Navigate to="/signin" />} 
-        />
+        <Route path="/admin/contacts" element={<AdminContacts />} />
+
 
         <Route 
           path="/education/edit/:id" 

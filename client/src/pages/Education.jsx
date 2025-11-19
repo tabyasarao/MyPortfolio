@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { 
   list as getEducations,
   create,
+  update,
   remove
 } from "../lib/api-education";
 
@@ -11,6 +12,7 @@ export default function Education() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [editingId, setEditingId] = useState(null);
 
   // Load educations from backend
   useEffect(() => {
@@ -33,19 +35,34 @@ export default function Education() {
     const token = localStorage.getItem("token");
 
     if (!isAdmin) {
-      setError("You must be logged in as admin to add education.");
+      setError("You must be logged in as admin to add or edit education.");
       return;
     }
 
-    const data = await create({ t: token }, form);
+    let data;
+
+    if (editingId) {
+      // UPDATE
+      data = await update(
+        { qualificationId: editingId },
+        { t: token },
+        form
+      );
+    } else {
+      // CREATE
+      data = await create({ t: token }, form);
+    }
 
     if (data.error) {
       setError(data.error);
     } else {
-      setEducationList([...educationList, data]);
+      setSuccess(editingId ? "Education updated successfully" : "Education added successfully");
       setForm({ school: "", degree: "", year: "" });
-      setError("");
-      setSuccess("Education added successfully");
+      setEditingId(null);
+
+      // Refresh list
+      const refreshed = await getEducations();
+      setEducationList(refreshed);
     }
   };
 
@@ -60,6 +77,15 @@ export default function Education() {
       setEducationList(educationList.filter((edu) => edu._id !== id));
       setSuccess("Education deleted successfully");
     }
+  };
+
+  const handleEdit = (edu) => {
+    setForm({
+      school: edu.school,
+      degree: edu.degree,
+      year: edu.year
+    });
+    setEditingId(edu._id);
   };
 
   return (
@@ -97,7 +123,9 @@ export default function Education() {
               required
             />
           </div>
-          <button type="submit">Add Education</button>
+          <button type="submit">
+            {editingId ? "Update Education" : "Add Education"}
+          </button>
         </form>
       )}
 
@@ -109,12 +137,21 @@ export default function Education() {
             <p>{edu.year}</p>
 
             {isAdmin && (
-              <button
-                onClick={() => handleDelete(edu._id)}
-                style={{ marginTop: "10px" }}
-              >
-                Delete
-              </button>
+              <>
+                <button
+                  onClick={() => handleEdit(edu)}
+                  style={{ marginRight: "10px", marginTop: "10px" }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => handleDelete(edu._id)}
+                  style={{ marginTop: "10px" }}
+                >
+                  Delete
+                </button>
+              </>
             )}
           </div>
         ))}
