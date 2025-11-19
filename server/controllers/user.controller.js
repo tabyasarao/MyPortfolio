@@ -4,11 +4,11 @@ import errorController from "./error.controller.js";
 // import bcrypt from "bcryptjs";
 
 const create = async (req, res) => {
-    // 🔑 FIX: The model handles hashing. Just pass the raw body.
+    
     const user = new User(req.body); 
     
     try {
-        // The password hash is generated here via the model's pre('save') hook
+
         await user.save(); 
 
         return res.status(201).json({ 
@@ -17,14 +17,13 @@ const create = async (req, res) => {
         
     } catch (err) {
       console.error("Mongoose Save Failed:", err);
-      // ... (rest of error handling) ...
+     
         return res.status(400).json({
             error: errorController.getErrorMessage(err),
         });
     }
 };
 
-// ... (rest of the file)
 
 const list = async (req, res) => {
   try {
