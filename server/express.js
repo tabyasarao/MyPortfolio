@@ -7,6 +7,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import path from 'path';
 
+
+
 // Routes
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
