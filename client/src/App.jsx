@@ -19,12 +19,12 @@ import auth from "./auth/auth-helper.js";
 
 function App() {
 
-  // ✅ Load auth state from localStorage on refresh
+ 
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return !!auth.isAuthenticated();
   });
 
-  // Optional: Sync whenever storage changes (multi-tab)
+
   useEffect(() => {
     const handleStorageChange = () => {
       setIsAuthenticated(!!auth.isAuthenticated());
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <Router>
-      {/* Show NavBar only if authenticated */}
+  
       {isAuthenticated && <NavBar />}
 
       <Routes>
