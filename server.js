@@ -1,6 +1,8 @@
 import config from "./config/config.js";
 import app from "./server/express.js";
 import mongoose from "mongoose";
+import cors from "cors";
+
 
 // ---------------------------
 // Connect to MongoDB
@@ -48,7 +50,7 @@ app.use("/api", qualificationRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/assets", assetsRoutes);
-
+app.use(cors());
 // ---------------------------
 // Default Route
 // ---------------------------
