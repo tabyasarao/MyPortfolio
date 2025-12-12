@@ -1,6 +1,6 @@
 // src/lib/api-education.js
 
-const API_URL = "http://localhost:3000/api/qualifications";
+const API_URL = "https://myportfolio-production-090b.up.railway.app/api/qualifications";
 
 /**
  * CREATE qualification (Admin only)

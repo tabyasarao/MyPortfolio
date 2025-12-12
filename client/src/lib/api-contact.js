@@ -1,6 +1,6 @@
 // src/lib/api-contact.js
 
-const API_URL = "http://localhost:3000/api/contacts";
+const API_URL = "https://myportfolio-production-090b.up.railway.app/api/contacts";
 
 // CREATE (Public)
 export const createContact = async (contact) => {
@@ -25,7 +25,7 @@ export const list = async () => {
     const response = await fetch(API_URL, {
       method: "GET",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
 
@@ -41,8 +41,8 @@ export const remove = async (params, credentials) => {
     const response = await fetch(`${API_URL}/${params.contactId}`, {
       method: "DELETE",
       headers: {
-        "Accept": "application/json",
-        "Authorization": "Bearer " + credentials.t
+        Accept: "application/json",
+        Authorization: "Bearer " + credentials.t,
       },
     });
 
