@@ -10,6 +10,8 @@ const __dirname = path.dirname(__filename);
 // Serve images and videos from /public/assets folder
 const assetsPath = path.join(__dirname, "../../client/public");
 
-router.use("/assets", express.static(assetsPath));
+// REMOVE the "/assets" prefix here! 
+// The prefix will be applied in server.js.
+router.use(express.static(assetsPath));
 
 export default router;
