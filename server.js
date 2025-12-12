@@ -66,14 +66,13 @@ app.use("/api/auth", authRoutes);
 // Start Server
 // ---------------------------
 
-const publicAssets = path.join(__dirname, "client/public");
-app.use("/assets", express.static(publicAssets));
+
 const frontendPath = path.join(__dirname, "client/dist");
 app.use(express.static(frontendPath));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(frontendPath, "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 
 console.log("🛠️ Starting backend server...");
 app.listen(config.port, (err) => {
