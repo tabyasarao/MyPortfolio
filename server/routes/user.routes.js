@@ -5,15 +5,15 @@ import { requireSignin, hasAuthorization } from "../controllers/auth.controller.
 const router = express.Router();
 
 // List all users
-router.get("/api/users", userCtrl.list);
+router.get("/users", userCtrl.list);
 
 // Create a new user
-router.post("/api/users", userCtrl.create);
+router.post("/users", userCtrl.create);
 
 // Get, update, delete a user by ID (requires signin and authorization)
-router.get("/api/users/:userId", requireSignin, hasAuthorization, userCtrl.read);
-router.put("/api/users/:userId", requireSignin, hasAuthorization, userCtrl.update);
-router.delete("/api/users/:userId", requireSignin, hasAuthorization, userCtrl.remove);
+router.get("/users/:userId", requireSignin, hasAuthorization, userCtrl.read);
+router.put("/users/:userId", requireSignin, hasAuthorization, userCtrl.update);
+router.delete("/users/:userId", requireSignin, hasAuthorization, userCtrl.remove);
 
 // Middleware to fetch user by ID
 router.param("userId", userCtrl.userByID);

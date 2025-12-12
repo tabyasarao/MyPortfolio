@@ -4,13 +4,13 @@ import contactCtrl from "../controllers/contact.controller.js";
 const router = express.Router();
 
 // PUBLIC - send message
-router.post("/api/contacts", contactCtrl.create);
+router.post("/contacts", contactCtrl.create);
 
 // ADMIN - list messages
-router.get("/api/contacts", contactCtrl.list);
+router.get("/contacts", contactCtrl.list);
 
 // ADMIN - delete message
-router.delete("/api/contacts/:contactId", contactCtrl.remove);
+router.delete("/contacts/:contactId", contactCtrl.remove);
 
 router.param("contactId", contactCtrl.findContactByID);
 
