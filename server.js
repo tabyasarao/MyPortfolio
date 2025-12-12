@@ -58,18 +58,24 @@ app.use("/api/auth", authRoutes);
 // ---------------------------
 // Default Route
 // ---------------------------
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Portfolio Application API 🚀" });
-});
+// app.get("/", (req, res) => {
+//   res.json({ message: "Welcome to the Portfolio Application API 🚀" });
+// });
 
 // ---------------------------
 // Start Server
 // ---------------------------
-console.log("🛠️ Starting backend server...");
+
 const publicAssets = path.join(__dirname, "client/public");
 app.use("/assets", express.static(publicAssets));
 const frontendPath = path.join(__dirname, "client/dist");
 app.use(express.static(frontendPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+console.log("🛠️ Starting backend server...");
 app.listen(config.port, (err) => {
   if (err) {
     console.error("❌ Server failed to start:", err);
