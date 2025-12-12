@@ -26,13 +26,12 @@ import "./server/models/contact.model.js";
 import "./server/models/qualification.model.js";
 import "./server/models/project.model.js";
 
-// Import routes
+// Import API routes
 import contactRoutes from "./server/routes/contact.routes.js";
 import projectRoutes from "./server/routes/project.routes.js";
 import qualificationRoutes from "./server/routes/qualification.routes.js";
 import userRoutes from "./server/routes/user.routes.js";
 import authRoutes from "./server/routes/auth.routes.js";
-import assetsRoutes from "./server/assets-router.js";
 
 // Mount API routes
 app.use("/api", contactRoutes);
@@ -40,12 +39,17 @@ app.use("/api", projectRoutes);
 app.use("/api", qualificationRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/assets", assetsRoutes);
+
+// -------------------------------------------------------
+// ⭐ SERVE PUBLIC STATIC ASSETS (SAFE WAY)
+// -------------------------------------------------------
+const publicAssets = path.join(__dirname, "client/public");
+app.use("/assets", express.static(publicAssets));
 
 // -------------------------------------------------------
 // ⭐ SERVE FRONTEND BUILD (IMPORTANT FOR RENDER)
 // -------------------------------------------------------
-const frontendPath = path.join(__dirname, "../client/dist");
+const frontendPath = path.join(__dirname, "client/dist");
 app.use(express.static(frontendPath));
 
 app.get("*", (req, res) => {
