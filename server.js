@@ -1,19 +1,16 @@
-import express from "express";
 import config from "./config/config.js";
 import app from "./server/express.js";
 import mongoose from "mongoose";
+import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// -----------------------------------------
-// Fix __dirname for ES modules
-// -----------------------------------------
+// __dirname replacement in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// -----------------------------------------
+// ---------------------------
 // Connect to MongoDB
-// -----------------------------------------
+// ---------------------------
 mongoose.Promise = global.Promise;
 
 mongoose
@@ -28,9 +25,9 @@ mongoose.connection.on("error", () => {
   throw new Error(`Unable to connect to DB: ${config.mongoUri}`);
 });
 
-// -----------------------------------------
+// ---------------------------
 // Load Models
-// -----------------------------------------
+// ---------------------------
 import "./server/models/user.model.js";
 import "./server/models/contact.model.js";
 import "./server/models/qualification.model.js";
@@ -38,51 +35,45 @@ import "./server/models/project.model.js";
 
 console.log("📦 All models loaded");
 
-// -----------------------------------------
-// Import Routes (NO /api prefix inside them)
-// -----------------------------------------
+// ---------------------------
+// Import Routes (NO DUPLICATES)
+// ---------------------------
 import contactRoutes from "./server/routes/contact.routes.js";
 import projectRoutes from "./server/routes/project.routes.js";
 import qualificationRoutes from "./server/routes/qualification.routes.js";
 import userRoutes from "./server/routes/user.routes.js";
 import authRoutes from "./server/routes/auth.routes.js";
 
-// -----------------------------------------
-// Mount API Routes
-// -----------------------------------------
+
+// ---------------------------
+// Mount Routes (CLEAN + CORRECT)
+// ---------------------------
 app.use("/api", contactRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", qualificationRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
 
-// -----------------------------------------
-// Serve STATIC PUBLIC ASSETS
-// (client/public → /assets)
-// -----------------------------------------
-const publicAssets = path.join(__dirname, "client/public");
-app.use("/assets", express.static(publicAssets));
 
-// -----------------------------------------
-// Serve FRONTEND BUILD (client/dist)
-// -----------------------------------------
-const frontendPath = path.join(__dirname, "client/dist");
-app.use(express.static(frontendPath));
-
-// Any non-API route should return React index.html
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+// ---------------------------
+// Default Route
+// ---------------------------
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the Portfolio Application API 🚀" });
 });
 
-// -----------------------------------------
+// ---------------------------
 // Start Server
-// -----------------------------------------
+// ---------------------------
 console.log("🛠️ Starting backend server...");
-
+const publicAssets = path.join(__dirname, "client/public");
+app.use("/assets", express.static(publicAssets));
+const frontendPath = path.join(__dirname, "client/dist");
+app.use(express.static(frontendPath));
 app.listen(config.port, (err) => {
   if (err) {
     console.error("❌ Server failed to start:", err);
   } else {
-    console.info(`🚀 Server running on port ${config.port}`);
+    console.info(`✅ Server running on port ${config.port}`);
   }
 });
