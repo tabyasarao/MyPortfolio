@@ -2,7 +2,7 @@
   "name": "mern_skeleton",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "server.js",
   "author": "Blessing Ajiboye",
   "license": "MIT",
   "devDependencies": {
@@ -13,11 +13,9 @@
     "nodemon": "^3.1.10"
   },
   "scripts": {
-    "dev": "concurrently 'vite' \"nodemon server.js\"",
+    "dev": "concurrently \"cd client && vite\" \"nodemon server.js\"",
     "build": "cd client && npm install && npm run build",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start":"node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -37,7 +35,6 @@
     "mongoose": "^8.20.0"
   },
   "engines": {
-  "node": "20.x"
-}
-
+    "node": "20.x"
+  }
 }

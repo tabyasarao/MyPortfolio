@@ -1,6 +1,7 @@
 // src/lib/api-project.js
 
-const API_URL = "https://myportfolio-production-090b.up.railway.app/api/projects";
+const API_URL = "/api/projects";
+
 
 /**
  * LIST all projects (public)

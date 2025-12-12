@@ -1,6 +1,7 @@
 // src/lib/api-auth.js
-const API_URL = "https://myportfolio-production-090b.up.railway.app/api/auth";
-const USER_API_URL = "https://myportfolio-production-090b.up.railway.app/api/users";
+const API_URL = "/api/auth";
+const USER_API_URL = "/api/users";
+
 
 // ------------------------ SIGNIN ------------------------
 export const signin = async (credentials) => {
@@ -10,6 +11,10 @@ export const signin = async (credentials) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
+
+    if (!response.ok) {
+      return await response.json();
+    }
 
     return await response.json();
   } catch (err) {
@@ -23,11 +28,15 @@ export const signup = async (user) => {
     const response = await fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
     });
+
+    if (!response.ok) {
+      return await response.json();
+    }
 
     return await response.json();
   } catch (err) {
@@ -39,6 +48,11 @@ export const signup = async (user) => {
 export const signout = async () => {
   try {
     const response = await fetch(`${API_URL}/signout`, { method: "GET" });
+
+    if (!response.ok) {
+      return await response.json();
+    }
+
     return await response.json();
   } catch (err) {
     return { error: "Network error. Please try again." };
@@ -51,10 +65,14 @@ export const read = async (params, credentials) => {
     const response = await fetch(`${USER_API_URL}/${params.userId}`, {
       method: "GET",
       headers: {
-        Accept: "application/json",
-        Authorization: "Bearer " + credentials.t,
+        "Accept": "application/json",
+        "Authorization": "Bearer " + credentials.t,
       },
     });
+
+    if (!response.ok) {
+      return await response.json();
+    }
 
     return await response.json();
   } catch (err) {
@@ -68,12 +86,16 @@ export const update = async (params, credentials, user) => {
     const response = await fetch(`${USER_API_URL}/${params.userId}`, {
       method: "PUT",
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + credentials.t,
+        "Authorization": "Bearer " + credentials.t,
       },
       body: JSON.stringify(user),
     });
+
+    if (!response.ok) {
+      return await response.json();
+    }
 
     return await response.json();
   } catch (err) {
@@ -87,11 +109,15 @@ export const remove = async (params, credentials) => {
     const response = await fetch(`${USER_API_URL}/${params.userId}`, {
       method: "DELETE",
       headers: {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
-        Authorization: "Bearer " + credentials.t,
+        "Authorization": "Bearer " + credentials.t,
       },
     });
+
+    if (!response.ok) {
+      return await response.json();
+    }
 
     return await response.json();
   } catch (err) {
