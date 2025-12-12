@@ -37,6 +37,7 @@
     "mongoose": "^8.20.0"
   },
   "engines": {
-    "node": "18.x"
-  } 
+  "node": "20.x"
+}
+
 }
