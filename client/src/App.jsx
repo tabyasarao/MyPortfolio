@@ -9,7 +9,7 @@ import Services from "./pages/Services.jsx";
 import Contact from "./pages/Contact.jsx";
 import SignIn from "./pages/Signin.jsx";
 import SignUp from "./pages/Signup.jsx";
-import SignOut from "./pages/Signout.jsx";
+import SignOut from "./pages/SignOut.jsx";
 import Education from "./pages/Education.jsx";
 
 import AdminContacts from "./pages/AdminContacts.jsx";   // <-- add this

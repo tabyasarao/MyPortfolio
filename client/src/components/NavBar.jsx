@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import SignOut from "../pages/Signout.jsx";
+import SignOut from "../pages/SignOut.jsx";
 import "../App.css";
 
 export default function NavBar() {
