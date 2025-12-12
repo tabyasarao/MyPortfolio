@@ -1,8 +1,13 @@
-import express from "express"; // GOOD
+import express from "express";
 import config from "./config/config.js";
-import app from "./server/express.js"; // GOOD
+import app from "./server/express.js";
 import mongoose from "mongoose";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // MongoDB connection
 mongoose.Promise = global.Promise;
@@ -29,22 +34,22 @@ import userRoutes from "./server/routes/user.routes.js";
 import authRoutes from "./server/routes/auth.routes.js";
 import assetsRoutes from "./server/assets-router.js";
 
-// Mount routes
+// Mount API routes
 app.use("/api", contactRoutes);
 app.use("/api", projectRoutes);
 app.use("/api", qualificationRoutes);
 app.use("/api", userRoutes);
 app.use("/api/auth", authRoutes);
-
-// Important: ONLY prefix here
 app.use("/assets", assetsRoutes);
 
-// Serve frontend
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "client/dist")));
+// -------------------------------------------------------
+// ⭐ SERVE FRONTEND BUILD (IMPORTANT FOR RENDER)
+// -------------------------------------------------------
+const frontendPath = path.join(__dirname, "../client/dist");
+app.use(express.static(frontendPath));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/dist/index.html"));
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 // Start server
