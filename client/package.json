@@ -19,6 +19,7 @@
     "@vitejs/plugin-react": "^4.4.1",
     "vite": "^6.3.5",
     "vitest": "^4.0.15",
-    "cypress": "^15.7.1"
+    "cypress": "^15.7.1",
+    "rollup": "4.7.0"
   }
 }
