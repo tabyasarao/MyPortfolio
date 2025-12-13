@@ -40,7 +40,7 @@ const frontendPath = path.join(__dirname, "client", "dist");
 app.use(express.static(frontendPath));
 
 // CATCH ALL FRONTEND ROUTES
-app.get("*", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
