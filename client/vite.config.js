@@ -20,14 +20,11 @@ export default defineConfig({
     },
   },
 
-  build: {
-    outDir: "./dist",       // ⭐ REQUIRED — build goes into /client/dist
-    emptyOutDir: true,
-    manifest: true,
-    rollupOptions: {
-      input: "./src/index.jsx",
-    },
-  },
+ build: {
+  outDir: "dist",
+  emptyOutDir: true
+}
+,
 
   // ⭐ Vitest configuration (fixes JSX parsing)
   test: {
