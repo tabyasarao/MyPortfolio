@@ -21,7 +21,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: "dist",       // ⭐ REQUIRED — build goes into /client/dist
+    outDir: "./dist",       // ⭐ REQUIRED — build goes into /client/dist
     emptyOutDir: true,
     manifest: true,
     rollupOptions: {
