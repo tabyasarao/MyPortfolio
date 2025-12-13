@@ -28,7 +28,7 @@ export default function Home() {
           <li>Problem Solving & Optimization</li>
         </ul>
       </div>
-      <p style={{marginTop: "20px", fontWeight: "bold"}}>
+      <p style={{marginTop: "10px", fontWeight: "bold"}}>
       CI/CD Deployment Test – Updated Successfully!
       </p>
     </div>
