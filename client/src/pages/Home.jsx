@@ -28,6 +28,9 @@ export default function Home() {
           <li>Problem Solving & Optimization</li>
         </ul>
       </div>
+      <p style={{marginTop: "20px", fontWeight: "bold"}}>
+      CI/CD Deployment Test – Updated Successfully!
+      </p>
     </div>
   );
 }
