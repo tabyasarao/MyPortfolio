@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Get PORT variable
 const { PORT = 3000 } = process.env;
 
 export default defineConfig({
@@ -20,7 +21,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: "dist",       // ⭐ REQUIRED FIX
+    outDir: "dist",       // ⭐ REQUIRED — build goes into /client/dist
     emptyOutDir: true,
     manifest: true,
     rollupOptions: {
@@ -28,12 +29,14 @@ export default defineConfig({
     },
   },
 
+  // ⭐ Vitest configuration (fixes JSX parsing)
   test: {
     environment: "jsdom",
     setupFiles: "./src/setupTests.js",
     globals: true,
   },
 
+  // ⭐ REQUIRED so JSX (<App />) works in Vitest
   esbuild: {
     jsx: "automatic",
   },
