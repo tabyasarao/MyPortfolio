@@ -25,7 +25,7 @@ export default defineConfig({
     emptyOutDir: true,
     manifest: true,
     rollupOptions: {
-      input: "./src/main.jsx",
+      input: "./src/index.js",
     },
   },
 
